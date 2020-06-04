@@ -26,7 +26,7 @@ class AddTube extends React.Component {
     const { title, url } = this.state;
     console.log(title, url)
     this.props.newTube({
-    	id: "hello",
+    	id: '1',
     	title,
     	url
     })

@@ -1,29 +1,26 @@
-export const updateTubes = ( tubes, newTube ) => {
-	const existingTube = tubes.find( tube => tube.id === newTube.id );
+export const updateTubes = ( state, newTube ) => {
+	const existingTube = state.tubes.find( tube => tube.id === newTube.id );
 
 	if (existingTube) {
-		return tubes.map( tube => 
-			tube.id === newTube.id ? { 
-				...tube,
-				quantity: tube.quantity + 1 
-			} : tube  )
+		if(state.currentTube.id === newTube.id) {
+			state.currentTube = {}
+			if (state.tubes.length) {
+				state.currentTube = state.tubes[0];
+			}
+		}
+		return { currentTube: {...state.currentTube}, tubes: state.tubes.map( tube => 
+			tube.id === newTube.id ? newTube : tube  )
+		}
 	}
-
-	return [...tubes, {...newTube, quantity: 1}]
-
 }
 
-export const displayTube = ( tubes, newTube ) => {
-	const existingTube = tubes.find( tube => tube.id === newTube.id );
+export const displayTube = ( state, newTube ) => {
+	const existingTube = state.tubes.find( tube => tube.id === newTube.id );
 
 	if (existingTube) {
-		return tubes.map( tube => 
-			tube.id === newTube.id ? { 
-				...tube,
-				quantity: tube.quantity + 1 
-			} : tube  )
+		state.currentTube = existingTube
 	}
 
-	return [...tubes, {...newTube, quantity: 1}]
+	return { ...state }
 
 }
