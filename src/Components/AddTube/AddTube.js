@@ -34,10 +34,10 @@ class AddTube extends React.Component {
 	    	title,
 	    	url
 	    })
-	  	this.setState({success: true})
+	  	this.setState({success: true},()=>setTimeout(()=>this.setState({success: false}),1750))
   	}
   	else{
-  		this.setState({error: true, msg:"fill all please!"})
+  		this.setState({error: true, msg:"fill all please!"},()=>setTimeout(()=>this.setState({error: false}),1750))
   	}
   }
 
@@ -59,20 +59,10 @@ class AddTube extends React.Component {
 				<Alert show={this.state.success} variant="success">
         <Alert.Heading>Success!</Alert.Heading>
         <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => this.setState({success:false})} variant="outline-success">
-            Close
-          </Button>
-        </div>
       </Alert>
      	<Alert show={this.state.error} variant="danger">
         <Alert.Heading>Failed, {this.state.msg}</Alert.Heading>
         <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => this.setState({error:false})} variant="outline-danger">
-            Close
-          </Button>
-        </div>
       </Alert>
 			</div>
 		)

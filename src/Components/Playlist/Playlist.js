@@ -29,7 +29,7 @@ class Playlist extends React.Component {
     
     const { title, url } = this.state;
     console.log(title, url)
-    this.props.updateTube({
+    this.props.update({
     	id: this.state.editID,
     	title,
     	url
@@ -61,11 +61,11 @@ class Playlist extends React.Component {
         				<Form onSubmit={this.handleUpdate}>
 								  <Form.Group controlId="formTitleTube">
 								    <Form.Label>Title</Form.Label>
-								    <Form.Control type="text" value={tube.title} name="title" onChange={this.handleChange}/>
+								    <Form.Control type="text" defaultValue={tube.title} name="title" onChange={this.handleChange}/>
 								  </Form.Group>
 								  <Form.Group controlId="formUrlTube">
 								    <Form.Label>Video URL</Form.Label>
-								    <Form.Control type="text" value={tube.url} name="url" onChange={this.handleChange}/>
+								    <Form.Control type="text" defaultValue={tube.url} name="url" onChange={this.handleChange}/>
 								  </Form.Group>
 									<Button variant="dark" type="submit">Save</Button>
 							</Form>
