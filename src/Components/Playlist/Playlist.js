@@ -25,7 +25,14 @@ class Playlist extends React.Component {
         	{this.props.tubes.map((tube,i)=>
         		<div className="vid" key={i+"vid"}>
         			<span className="vid-play"><img src={play} alt="play" className="img"/>{tube.title}</span>
-        			<span className="duration">1:50</span>
+        			<ReactPlayer
+			          className='react-player'
+			          url= { tube.url }
+			          width='100%'
+			          height='100%'
+			          controls={true}
+			          light={true}
+			        />
         		</div>
         	)}
         </div>
