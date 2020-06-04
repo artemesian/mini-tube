@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 export const tubeReducer = (currentState=INITIAL_STATE, action={}) => {
 	
 	switch(action.type) {
-			case tubeActionTypes.NEW_ITEM:
+			case tubeActionTypes.NEW_TUBE:
 				return ({
 					...currentState,
 					tubes: [ ...currentState.tubes, action.payload ]

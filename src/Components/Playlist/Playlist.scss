@@ -29,16 +29,21 @@
 				align-items: center;
 				font-size: 14px;
 
-				.img{
-					width: 36px;
-					height: 36px;
-					margin-right: 15px;
+				.prev{
+					width: 64px;
+					height: 100%;
+					margin-right: 25px;
 				}
 			}
 
-			.duration{
-				font-weight: lighter;
-				font-size: 10px;
+			.options{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				button{
+					margin: 0 2.5px;
+				}
 			}
 		}
 	}

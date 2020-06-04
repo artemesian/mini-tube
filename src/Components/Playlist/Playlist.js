@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactPlayer from 'react-player';
+import { Button } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { displayTube, removeTube, updateTube } from '../../Redux/tube/tube-actions.js'
@@ -24,15 +25,24 @@ class Playlist extends React.Component {
         <div id="list-wrapper">
         	{this.props.tubes.map((tube,i)=>
         		<div className="vid" key={i+"vid"}>
-        			<span className="vid-play"><img src={play} alt="play" className="img"/>{tube.title}</span>
-        			<ReactPlayer
-			          className='react-player'
-			          url= { tube.url }
-			          width='100%'
-			          height='100%'
-			          controls={true}
-			          light={true}
-			        />
+        			<div className="vid-play">
+	        			<span className="prev">
+		        			<ReactPlayer
+					          className='react-player'
+					          url= { tube.url }
+					          width='100%'
+					          height='100%'
+					          controls={true}
+					          light={true}
+					        />
+					      </span>
+				      {tube.title}
+				      </div>
+				      <div className="options">
+				      	<Button variant="danger" size="sm">delete</Button>
+				      	{'  '}
+				      	<Button variant="warning" size="sm">edit</Button>
+				      </div>
         		</div>
         	)}
         </div>

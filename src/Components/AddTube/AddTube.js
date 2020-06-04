@@ -18,7 +18,6 @@ class AddTube extends React.Component {
 	handleChange = event => {
     const { name, value } = event.target;
 
-
     this.setState({ [name]: value})
   }
   handleSubmit = async event => {
@@ -26,6 +25,11 @@ class AddTube extends React.Component {
     
     const { title, url } = this.state;
     console.log(title, url)
+    this.props.newTube({
+    	id: "hello",
+    	title,
+    	url
+    })
   }
 
 	render() {
