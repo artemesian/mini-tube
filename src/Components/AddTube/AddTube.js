@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
 import { Form } from 'react-bootstrap'
+import { Alert } from 'react-bootstrap'
 
 import { connect } from 'react-redux';
 import { newTube } from '../../Redux/tube/tube-actions.js'
@@ -12,7 +13,10 @@ class AddTube extends React.Component {
 		super();
 		this.state = {
 			title: '',
-			url: ''
+			url: '',
+			success: false,
+			error: false,
+			msg: ""
 		}
 	}
 	handleChange = event => {
@@ -22,14 +26,19 @@ class AddTube extends React.Component {
   }
   handleSubmit = async event => {
     event.preventDefault();
-    
     const { title, url } = this.state;
-    console.log(title, url)
-    this.props.newTube({
-    	id: '1',
-    	title,
-    	url
-    })
+  	if(title && url){
+	    console.log(title, url)	
+	    this.props.newTube({
+	    	id: '1',
+	    	title,
+	    	url
+	    })
+	  	this.setState({success: true})
+  	}
+  	else{
+  		this.setState({error: true, msg:"fill all please!"})
+  	}
   }
 
 	render() {
@@ -47,6 +56,24 @@ class AddTube extends React.Component {
 				<Button variant="dark" type="submit">ADD</Button>
 			</Form>
 				<Button id="see-playlist" variant="outline-info" onClick={()=>{console.log('hello');this.props.handleShow()}}>See Playlist</Button>
+				<Alert show={this.state.success} variant="success">
+        <Alert.Heading>Success!</Alert.Heading>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button onClick={() => this.setState({success:false})} variant="outline-success">
+            Close
+          </Button>
+        </div>
+      </Alert>
+     	<Alert show={this.state.error} variant="danger">
+        <Alert.Heading>Failed, {this.state.msg}</Alert.Heading>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button onClick={() => this.setState({error:false})} variant="outline-danger">
+            Close
+          </Button>
+        </div>
+      </Alert>
 			</div>
 		)
 	}

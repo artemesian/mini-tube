@@ -40,6 +40,9 @@ class Playlist extends React.Component {
 		return (
 			<div id="playlist-box">
 				<div id="player-wrapper">
+				{!this.props.currentTube.id?
+					<h1>NO TUBE</h1>
+				:
 				 <ReactPlayer
           className='react-player'
           url= { this.props.currentTube.url }
@@ -48,6 +51,7 @@ class Playlist extends React.Component {
           controls={true}
           light={true}
         />
+      	}
 				</div>
         <div id="list-wrapper">
         	{this.props.tubes.map((tube,i)=>
@@ -69,7 +73,7 @@ class Playlist extends React.Component {
         			:
         			<Hoc>
         			<div className="vid-play">
-	        			<span className="prev" onClick={console.log('clicked!')}>
+	        			<span className="prev" onClick={()=>console.log('clicked!')}>
 		        			<ReactPlayer
 					          className='react-player'
 					          url= { tube.url }
@@ -79,12 +83,12 @@ class Playlist extends React.Component {
 					          light={true}
 					        />
 					      </span>
-				      	<span onClick={this.props.display(tube)}>{tube.title}</span>
+				      	<span onClick={()=>this.props.display(tube)}>{tube.title}</span>
 				      </div>
 				      <div className="options">
-				      	<Button variant="danger" size="sm" onClick={this.props.display(tube)}>delete</Button>
+				      	<Button variant="danger" size="sm" onClick={()=>this.props.deleteTube(tube)}>delete</Button>
 				      	{'  '}
-				      	<Button variant="warning" size="sm" onClick={this.setState({editID: tube.id})}>edit</Button>
+				      	<Button variant="warning" size="sm" onClick={()=>this.setState({editID: tube.id})}>edit</Button>
 				      </div>
 				     </Hoc>
 				    }
@@ -103,7 +107,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	display : tube => dispatch(displayTube(tube)),
-	delete : tube => dispatch(removeTube(tube)),
+	deleteTube : tube => dispatch(removeTube(tube)),
 	update : tube => dispatch(updateTube(tube)),
 })
 
