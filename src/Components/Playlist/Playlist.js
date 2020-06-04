@@ -2,6 +2,7 @@ import React from 'react'
 import ReactPlayer from 'react-player';
 import { Button } from 'react-bootstrap';
 import { Form } from 'react-bootstrap'
+import axios from 'axios';
 
 import Hoc from '../Hoc/Hoc.js'
 import { connect } from 'react-redux';
@@ -24,17 +25,30 @@ class Playlist extends React.Component {
 
     this.setState({ [name]: value})
   }
-  handleUpdate = async event => {
-    event.preventDefault();
-    
+
+  handleUpdate = () => {
     const { title, url } = this.state;
     console.log(title, url)
-    this.props.update({
-    	id: this.state.editID,
-    	title,
-    	url
-    })
-    this.setState({editID: null})
+    axios.put('api/update-tube/' + this.state.editID, { id: this.state.editID, url: this.state.url, title: this.state.title })
+     .then(response => {
+        const { id, title, url } = response
+        this.props.updateTube({
+					id,
+					title,
+				  url
+				})
+    		this.setState({editID: null})	
+      })
+      .catch(error=>console.log(error.message));
+  }
+
+  handleDelete = tube => {
+    axios.delete('api/delete-tube/' + tube.id)
+     .then(response => {
+        this.props.deleteTube(tube)
+        console.log('Tube deleted!')
+      })
+      .catch(error=>console.log(error.message));
   }
 	render() {
 		return (
@@ -86,7 +100,7 @@ class Playlist extends React.Component {
 				      	<span onClick={()=>this.props.display(tube)}>{tube.title}</span>
 				      </div>
 				      <div className="options">
-				      	<Button variant="danger" size="sm" onClick={()=>this.props.deleteTube(tube)}>delete</Button>
+				      	<Button variant="danger" size="sm" onClick={()=>this.handleDelete(tube)}>delete</Button>
 				      	{'  '}
 				      	<Button variant="warning" size="sm" onClick={()=>this.setState({editID: tube.id})}>edit</Button>
 				      </div>

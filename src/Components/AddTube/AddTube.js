@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from 'react-bootstrap';
 import { Form } from 'react-bootstrap'
 import { Alert } from 'react-bootstrap'
+import axios from 'axios'
 
 import { connect } from 'react-redux';
 import { newTube } from '../../Redux/tube/tube-actions.js'
@@ -29,12 +30,22 @@ class AddTube extends React.Component {
     const { title, url } = this.state;
   	if(title && url){
 	    console.log(title, url)	
-	    this.props.newTube({
-	    	id: '1',
-	    	title,
-	    	url
-	    })
-	  	this.setState({success: true},()=>setTimeout(()=>this.setState({success: false}),1750))
+	    axios
+          .post('api/new-tube', 
+          	{
+              title,
+	    				url
+            })
+            .then(response => {
+            	const { id, title, url } = response
+                this.props.newTube({
+						    	id,
+						    	title,
+						    	url
+						    })
+						  	this.setState({success: true},()=>setTimeout(()=>this.setState({success: false}),1750))
+            })
+            .catch(error=>this.setState({error: true, msg:error.message},()=>setTimeout(()=>this.setState({error: false}),1750)));
   	}
   	else{
   		this.setState({error: true, msg:"fill all please!"},()=>setTimeout(()=>this.setState({error: false}),1750))

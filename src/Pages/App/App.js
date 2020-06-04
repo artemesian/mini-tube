@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal'
 import { Button } from 'react-bootstrap';
+import axios from 'axios'
 
 import { connect } from 'react-redux';
 
@@ -20,7 +21,12 @@ class App extends React.Component{
 	handleShow = () => this.setState({show: !this.state.show})
 
 	componentDidMount(){
-		console.log(this.state)
+		axios
+       	.get('api/tubes')
+        .then(response => {
+          this.props.getTubes({tubes: response.map(tube=>{return{id: tube.id, title: tube.title, url: tube.url }})})
+        })
+        .catch(error=>console.log(error.message));
 	}
 
 	render(){
