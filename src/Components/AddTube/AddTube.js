@@ -21,11 +21,17 @@ class AddTube extends React.Component {
 
     this.setState({ [name]: value})
   }
+  handleSubmit = async event => {
+    event.preventDefault();
+    
+    const { title, url } = this.state;
+    console.log(title, url)
+  }
 
 	render() {
 		return (
 			<div id="tube-box">
-			<Form>
+			<Form onSubmit={this.handleSubmit}>
 			  <Form.Group controlId="formTitleTube">
 			    <Form.Label>Title</Form.Label>
 			    <Form.Control type="text" placeholder="Title of Tube" name="title" onChange={this.handleChange}/>
@@ -34,7 +40,7 @@ class AddTube extends React.Component {
 			    <Form.Label>Video URL</Form.Label>
 			    <Form.Control type="text" placeholder="https://www.youtube.com/......" name="url" onChange={this.handleChange}/>
 			  </Form.Group>
-				<Button variant="dark">ADD</Button>
+				<Button variant="dark" type="submit">ADD</Button>
 			</Form>
 				<Button id="see-playlist" variant="outline-info" onClick={()=>{console.log('hello');this.props.handleShow()}}>See Playlist</Button>
 			</div>
