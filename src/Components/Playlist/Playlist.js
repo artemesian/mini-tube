@@ -4,10 +4,14 @@ import ReactPlayer from 'react-player';
 import { connect } from 'react-redux';
 import { displayTube, removeTube, updateTube } from '../../Redux/tube/tube-actions.js'
 
+import play from '../../Assets/play.svg';
+import './Playlist.scss'
+
 class Playlist extends React.Component {
 	render() {
 		return (
 			<div id="playlist-box">
+				<div id="player-wrapper">
 				 <ReactPlayer
           className='react-player'
           url= { this.props.currentTube.url }
@@ -16,10 +20,12 @@ class Playlist extends React.Component {
           controls={true}
           light={true}
         />
-        <div id="list">
+				</div>
+        <div id="list-wrapper">
         	{[0,1,2].map((tube,i)=>
         		<div className="vid" key={i+"vid"}>
-        			hello
+        			<span className="vid-play"><img src={play} alt="play" className="img"/>{this.props.currentTube.title}</span>
+        			<span className="duration">1:50</span>
         		</div>
         	)}
         </div>

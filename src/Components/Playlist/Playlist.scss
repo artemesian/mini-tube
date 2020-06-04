@@ -1,0 +1,45 @@
+#playlist-box{
+	
+	#player-wrapper{
+		width: 100%;
+		height: 300px;
+		margin-bottom: 15px;
+	}
+	#list-wrapper{
+		height: auto;
+		width: 100%;
+
+		.vid{
+			width: 100%;
+			height: 64px;
+			border-left: 2px solid blue;
+			border-right: 2px solid blue;
+			margin: 10px 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 0 5px;
+
+			.vid-play{
+				height: 100%;
+				width: 80%;
+				font-size: 14px;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				font-size: 14px;
+
+				.img{
+					width: 36px;
+					height: 36px;
+					margin-right: 15px;
+				}
+			}
+
+			.duration{
+				font-weight: lighter;
+				font-size: 10px;
+			}
+		}
+	}
+}
