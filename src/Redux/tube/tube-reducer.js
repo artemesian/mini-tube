@@ -5,18 +5,24 @@ import { updateTubes, displayTube, deleteTube } from './tube-utils.js'
 const INITIAL_STATE = {
 	tubes: [],
 	currentTube:{
-		id: "2",
-		title: 'ADD A DIV',
-		url: 'https://www.youtube.com/watch?v=ysz5S6PUM-U'
-	}
+	},
+	loadingState: "Loading"
 }
 
 export const tubeReducer = (currentState=INITIAL_STATE, action={}) => {
 	
 	switch(action.type) {
+			case tubeActionTypes.GET_TUBES:
+				return ({
+					...currentState,
+					loadingState: 'NO TUBE',
+					currentTube: action.payload.length?action.payload[0]:{},
+					tubes: [...action.payload]
+				})
 			case tubeActionTypes.NEW_TUBE:
 				return ({
 					...currentState,
+					currentTube: currentState.currentTube.id?currentState.currentTube: action.payload,
 					tubes: [ ...currentState.tubes, action.payload ]
 				})
 			case tubeActionTypes.REMOVE_TUBE:

@@ -1,7 +1,5 @@
 import React from 'react'
-import { Button } from 'react-bootstrap';
-import { Form } from 'react-bootstrap'
-import { Alert } from 'react-bootstrap'
+import { Button, Form, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 
 import { connect } from 'react-redux';
@@ -17,7 +15,8 @@ class AddTube extends React.Component {
 			url: '',
 			success: false,
 			error: false,
-			msg: ""
+			msg: "",
+			inLoad: false
 		}
 	}
 	handleChange = event => {
@@ -26,29 +25,33 @@ class AddTube extends React.Component {
     this.setState({ [name]: value})
   }
   handleSubmit = async event => {
+  	this.setState({inLoad: true})
     event.preventDefault();
     const { title, url } = this.state;
   	if(title && url){
 	    console.log(title, url)	
 	    axios
-          .post('api/new-tube', 
+          .post('https://fast-dusk-92564.herokuapp.com/api/movies', 
           	{
               title,
 	    				url
             })
             .then(response => {
-            	const { id, title, url } = response
+            	if(response.data.data){
+            	const { id, title, url } = response.data.data
                 this.props.newTube({
 						    	id,
 						    	title,
 						    	url
 						    })
-						  	this.setState({success: true},()=>setTimeout(()=>this.setState({success: false}),1750))
+						  	this.setState({success: true, inLoad: false},()=>setTimeout(()=>this.setState({success: false, url: "", title: "", msg :""}),1750))
+						  }
+						  else console.log(response)
             })
-            .catch(error=>this.setState({error: true, msg:error.message},()=>setTimeout(()=>this.setState({error: false}),1750)));
+            .catch(error=>this.setState({error: true, msg:error.message, inLoad: false},()=>setTimeout(()=>this.setState({error: false,}),1750)));
   	}
   	else{
-  		this.setState({error: true, msg:"fill all please!"},()=>setTimeout(()=>this.setState({error: false}),1750))
+  		this.setState({error: true, msg:"fill all please!", inLoad:false},()=>setTimeout(()=>this.setState({error: false}),1750))
   	}
   }
 
@@ -58,13 +61,21 @@ class AddTube extends React.Component {
 			<Form onSubmit={this.handleSubmit}>
 			  <Form.Group controlId="formTitleTube">
 			    <Form.Label>Title</Form.Label>
-			    <Form.Control type="text" placeholder="Title of Tube" name="title" onChange={this.handleChange}/>
+			    <Form.Control type="text" value={this.state.title} placeholder="Title of Tube" name="title" onChange={this.handleChange}/>
 			  </Form.Group>
 			  <Form.Group controlId="formUrlTube">
 			    <Form.Label>Video URL</Form.Label>
-			    <Form.Control type="text" placeholder="https://www.youtube.com/......" name="url" onChange={this.handleChange}/>
+			    <Form.Control type="text" value={this.state.url} placeholder="https://www.youtube.com/......" name="url" onChange={this.handleChange}/>
 			  </Form.Group>
-				<Button variant="dark" type="submit">ADD</Button>
+				<Button variant="dark" type="submit">
+				{this.state.inLoad?
+				<Spinner
+      		as="span"
+      		animation="border"
+      		size="sm"
+      		role="status"
+      		aria-hidden="true"
+    		/>:null}ADD</Button>
 			</Form>
 				<Button id="see-playlist" variant="outline-info" onClick={()=>{console.log('hello');this.props.handleShow()}}>See Playlist</Button>
 				<Alert show={this.state.success} variant="success">

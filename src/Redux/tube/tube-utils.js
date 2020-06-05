@@ -8,7 +8,7 @@ export const updateTubes = ( state, newTube ) => {
 				state.currentTube = state.tubes[0];
 			}
 		}
-		return { currentTube: {...state.currentTube}, tubes: state.tubes.map( tube => 
+		return { ...state,currentTube: {...state.currentTube}, tubes: state.tubes.map( tube => 
 			tube.id === newTube.id ? newTube : tube  )
 		}
 	}
@@ -25,7 +25,7 @@ export const deleteTube = ( state, newTube ) => {
 				state.currentTube = state.tubes[0];
 			}
 		}
-		return { currentTube: {...state.currentTube}, tubes: state.tubes.filter(tube => tube.id !== newTube.id)
+		return { ...state,currentTube: {...state.currentTube}, tubes: state.tubes.filter(tube => tube.id !== newTube.id)
 		}
 	}
 }

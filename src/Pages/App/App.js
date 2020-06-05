@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import AddTube from '../../Components/AddTube/AddTube';
 import Playlist from '../../Components/Playlist/Playlist';
+import { getTubes } from '../../Redux/tube/tube-actions.js'
 
 import './App.scss';
 
@@ -22,9 +23,10 @@ class App extends React.Component{
 
 	componentDidMount(){
 		axios
-       	.get('api/tubes')
+       	.get('https://fast-dusk-92564.herokuapp.com/api/movies')
         .then(response => {
-          this.props.getTubes({tubes: response.map(tube=>{return{id: tube.id, title: tube.title, url: tube.url }})})
+        	if(response.data.data){this.props.getTubes(response.data.data.map(tube=>{return{id: tube.id, title: tube.title, url: tube.url }}))}
+        		else {console.log(response)}
         })
         .catch(error=>console.log(error.message));
 	}
@@ -54,6 +56,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+	getTubes :(tubes)=>dispatch(getTubes(tubes))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(App)

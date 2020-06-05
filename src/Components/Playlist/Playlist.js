@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactPlayer from 'react-player';
-import { Button } from 'react-bootstrap';
-import { Form } from 'react-bootstrap'
+import { Button, Form, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 
 import Hoc from '../Hoc/Hoc.js'
@@ -17,7 +16,8 @@ class Playlist extends React.Component {
 		this.state = {
 			title: '',
 			url: '',
-			editID: null
+			editID: null,
+			inLoad: ''
 		}
 	}
 	handleChange = event => {
@@ -26,26 +26,34 @@ class Playlist extends React.Component {
     this.setState({ [name]: value})
   }
 
-  handleUpdate = () => {
-    const { title, url } = this.state;
+  handleUpdate = (event,tube) => {
+  	event.preventDefault()
+		this.setState({inLoad: 'edit'+tube.id})
+    let { title, url } = this.state;
+    
     console.log(title, url)
-    axios.put('api/update-tube/' + this.state.editID, { id: this.state.editID, url: this.state.url, title: this.state.title })
+    axios.put('https://fast-dusk-92564.herokuapp.com/api/movies/' + this.state.editID, { id: this.state.editID, url: this.state.url, title: this.state.title })
      .then(response => {
-        const { id, title, url } = response
+     	if(response.data.data){
+        const { id, title, url } = response.data.data
         this.props.updateTube({
 					id,
 					title,
 				  url
 				})
-    		this.setState({editID: null})	
+    		this.setState({editID: null, title: "", url: "", inLoad:''})	
+    	}
+    	else console.log(response)
       })
       .catch(error=>console.log(error.message));
   }
 
   handleDelete = tube => {
-    axios.delete('api/delete-tube/' + tube.id)
+  	this.setState({inLoad: 'del'+tube.id})
+    axios.delete('https://fast-dusk-92564.herokuapp.com/api/movies/' + tube.id)
      .then(response => {
         this.props.deleteTube(tube)
+        this.setState({inLoad: ''})
         console.log('Tube deleted!')
       })
       .catch(error=>console.log(error.message));
@@ -54,8 +62,8 @@ class Playlist extends React.Component {
 		return (
 			<div id="playlist-box">
 				<div id="player-wrapper">
-				{!this.props.currentTube.id?
-					<h1>NO TUBE</h1>
+				{!this.props.tubes.length?
+					<h1>{this.props.loadingState==="Loading"?<Spinner animation="border" />: this.props.loadingState}</h1>
 				:
 				 <ReactPlayer
           className='react-player'
@@ -71,17 +79,25 @@ class Playlist extends React.Component {
         	{this.props.tubes.map((tube,i)=>
         		<div className="vid" key={i+"vid"}>
         		{(this.state.editID === tube.id)? 
-        			<div className="vid-play edit">
-        				<Form onSubmit={this.handleUpdate}>
-								  <Form.Group controlId="formTitleTube">
+        			<div className="vid-play">
+        				<Form onSubmit={(e)=>this.handleUpdate(e,tube)} className="edit">
+								  <Form.Group controlId="formTitleTubeE">
 								    <Form.Label>Title</Form.Label>
 								    <Form.Control type="text" defaultValue={tube.title} name="title" onChange={this.handleChange}/>
 								  </Form.Group>
-								  <Form.Group controlId="formUrlTube">
+								  <Form.Group controlId="formUrlTubeE">
 								    <Form.Label>Video URL</Form.Label>
 								    <Form.Control type="text" defaultValue={tube.url} name="url" onChange={this.handleChange}/>
 								  </Form.Group>
-									<Button variant="dark" type="submit">Save</Button>
+									<Button variant="dark" type="submit">
+									{this.state.inLoad==='edit'+tube.id?
+										<Spinner
+						      		as="span"
+						      		animation="border"
+						      		size="sm"
+						      		role="status"
+						      		aria-hidden="true"
+						    		/>:null}Save</Button>
 							</Form>
         			</div>
         			:
@@ -100,9 +116,17 @@ class Playlist extends React.Component {
 				      	<span onClick={()=>this.props.display(tube)}>{tube.title}</span>
 				      </div>
 				      <div className="options">
-				      	<Button variant="danger" size="sm" onClick={()=>this.handleDelete(tube)}>delete</Button>
+				      	<Button variant="danger" size="sm" onClick={()=>this.handleDelete(tube)}>
+				      	{this.state.inLoad==='del'+tube.id?
+									<Spinner
+					      		as="span"
+					      		animation="border"
+					      		size="sm"
+					      		role="status"
+					      		aria-hidden="true"
+					    		/>:null}delete</Button>
 				      	{'  '}
-				      	<Button variant="warning" size="sm" onClick={()=>this.setState({editID: tube.id})}>edit</Button>
+				      	<Button variant="warning" size="sm" onClick={()=>this.setState({editID: tube.id,...tube})}>edit</Button>
 				      </div>
 				     </Hoc>
 				    }
@@ -116,13 +140,14 @@ class Playlist extends React.Component {
 
 const mapStateToProps = state => ({
 	currentTube : state.tube.currentTube,
-	tubes : state.tube.tubes
+	tubes : state.tube.tubes,
+	loadingState: state.tube.loadingState
 })
 
 const mapDispatchToProps = dispatch => ({
 	display : tube => dispatch(displayTube(tube)),
 	deleteTube : tube => dispatch(removeTube(tube)),
-	update : tube => dispatch(updateTube(tube)),
+	updateTube : tube => dispatch(updateTube(tube)),
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(Playlist)

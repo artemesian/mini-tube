@@ -19,3 +19,8 @@ export const updateTube = tube => ({
 	type: tubeActionTypes.UPDATE_TUBE,
 	payload: tube
 })
+
+export const getTubes = tubes => ({
+	type: tubeActionTypes.GET_TUBES,
+	payload: tubes
+})
