@@ -109,9 +109,9 @@ class Playlist extends React.Component {
 	        					link_vid = link_vid.split('_');
 	        					let newTube = {}
 	        					newTube.url = link_vid[0];
-	        					newTube.id = link_vid[1];
+	        					newTube.id = Number(link_vid[1]);
 	        					newTube.title = link_vid[2];
-	        					return this.props.display(newTube)
+	        					return this.props.displayTube(newTube)
 	        				}}/>
 		        			<ReactPlayer
 					          className='react-player'
@@ -122,7 +122,7 @@ class Playlist extends React.Component {
 					          light={true}
 					        />
 					      </div>
-				      	<span className='title' onClick={()=>this.props.display(tube)}>{tube.title}</span>
+				      	<span className='title' onClick={()=>this.props.displayTube(tube)}>{tube.title}</span>
 				      </div>
 				      <div className="options">
 				      	<Button variant="danger" size="sm" onClick={()=>this.handleDelete(tube)}>
@@ -154,7 +154,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-	display : tube => dispatch(displayTube(tube)),
+	displayTube : tube => dispatch(displayTube(tube)),
 	deleteTube : tube => dispatch(removeTube(tube)),
 	updateTube : tube => dispatch(updateTube(tube)),
 })
