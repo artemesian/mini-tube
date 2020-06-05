@@ -103,7 +103,16 @@ class Playlist extends React.Component {
         			:
         			<Hoc>
         			<div className="vid-play">
-	        			<span className="prev" onClick={()=>console.log('clicked!')}>
+	        			<div className="prev">
+	        				<div className="link-div" link_vid={tube.url+'_'+tube.id+'_'+tube.title} onClick={(e)=>{
+	        					let link_vid=e.target.getAttribute('link_vid');
+	        					link_vid = link_vid.split('_');
+	        					let newTube = {}
+	        					newTube.url = link_vid[0];
+	        					newTube.id = link_vid[1];
+	        					newTube.title = link_vid[2];
+	        					return this.props.display(newTube)
+	        				}}/>
 		        			<ReactPlayer
 					          className='react-player'
 					          url= { tube.url }
@@ -112,8 +121,8 @@ class Playlist extends React.Component {
 					          controls={true}
 					          light={true}
 					        />
-					      </span>
-				      	<span onClick={()=>this.props.display(tube)}>{tube.title}</span>
+					      </div>
+				      	<span className='title' onClick={()=>this.props.display(tube)}>{tube.title}</span>
 				      </div>
 				      <div className="options">
 				      	<Button variant="danger" size="sm" onClick={()=>this.handleDelete(tube)}>

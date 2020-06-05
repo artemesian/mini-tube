@@ -77,7 +77,7 @@ class AddTube extends React.Component {
       		aria-hidden="true"
     		/>:null}ADD</Button>
 			</Form>
-				<Button id="see-playlist" variant="outline-info" onClick={()=>{console.log('hello');this.props.handleShow()}}>See Playlist</Button>
+				<Button id="see-playlist" variant="outline-info" onClick={()=>{this.props.handleShow()}}>See Playlist</Button>
 				<Alert show={this.state.success} variant="success">
         <Alert.Heading>Success!</Alert.Heading>
         <hr />
